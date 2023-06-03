@@ -272,18 +272,15 @@ export class News extends Component {
         }
     ]
 
-    // this  not need to write in yes it is used it may be possible at last he romoved all the code as what he do first he create lot of code and then remove at make it smalll . some how this is good then(every good developer do this. write trash code than optimise or make it small)
     constructor() {
         super();
         console.log("Hello i am a constructer from a news component");
         this.state = {
             articles: this.articles
-            // loading: false
+            // loading : false
         }
 
     }
-
-    // now tell me what problem you are facing
 
     render() {
         return (
@@ -297,8 +294,8 @@ export class News extends Component {
                 <div className="row">
                     {this.state.articles.map((element) => {
                         return (
-                            <div className="col-md-4">
-                                <NewsItem tittle={element.title} description={element.description} ImageUrl={element.urlToImage} />
+                            <div className="col-md-4" key={element.url}>
+                                <NewsItem title={element.title.slice(0, 45)} description={element.description ? element.description.slice(0, 79) : ""} imageUrl={element.urlToImage} Newsurl={element.url} />
                             </div>
                         )
                     })}
