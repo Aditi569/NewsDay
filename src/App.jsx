@@ -7,6 +7,8 @@ import React, { Component } from 'react'
 import NavBar from './components/NavBar'
 import News from './components/News'
 import NewsItem from './NewsItem'
+import { Routes, Route } from 'react-router-dom'
+
 
 
 export default class App extends Component {  //class component start here
@@ -20,7 +22,17 @@ export default class App extends Component {  //class component start here
       <div className='my-3'>
         {/* <strong>hello my first class based components {this.c}</strong> */}
         <NavBar />
-        <News />
+
+        <Routes>
+          <Route exact path='/' element={<News pageSize={5} />} />
+          <Route exact path='/business' element={<News category="business" pageSize={5} />} />
+          <Route exact path='/sports' element={<News category="sports" pageSize={5} />} />
+          <Route exact path='/general' element={<News category="general" pageSize={5} />} />
+          <Route exact path='/technology' element={<News category="technology" pageSize={5} />} />
+          <Route exact path='/entertainment' element={<News category="entertainment" pageSize={5} />} />
+          <Route exact path='/health' element={<News category="health" pageSize={5} />} />
+
+        </Routes>
       </div >
     )
   }

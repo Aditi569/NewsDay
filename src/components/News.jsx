@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import NewsItem from '../NewsItem';
+import Spinner from '../Spinner';
+
 
 
 // You are using classbased that is too old. and now a days every class based component is getiing converted to functional based
@@ -272,21 +274,99 @@ export class News extends Component {
         }
     ]
 
+    static defaultProps = {
+        country: "in",
+        pageSize: 8,
+        category: "general"
+    }
+
+
+
     constructor() {
         super();
-        console.log("Hello i am a constructer from a news component");
+        // console.log("Hello i am a constructer from a news component");
         this.state = {
-            articles: this.articles
-            // loading : false
+            articles: [],
+            page: 1,
+            loading: false
         }
 
     }
 
+    async componentDidMount() {
+        console.log("cdm")
+        this.setState({ loading: true })
+        // let url = https://newsapi.org/v2/top-headlines?country=in&apiKey=88f6341d3ae245aa849d084a95112645&page=1pageSize=2
+        let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=88f6341d3ae245aa849d084a95112645&page=1&pageSize=${this.props.pageSize}`;
+        // const fetchNews = async () => {
+        let data = await fetch(url);
+        let parseData = await data.json()
+        console.log(parseData);
+        this.setState({ articles: parseData.articles, totalResults: parseData.totalResults, loading: false })
+        // }
+
+        // fetchNews();
+
+    }
+
+
+
+
+
+    handlePrevclick = async () => {
+
+        console.log("previous")
+
+        this.setState({ loading: true })
+        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=88f6341d3ae245aa849d084a95112645&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+        // const fetchNews = async () => {
+        let data = await fetch(url);
+        let parseData = await data.json()
+        console.log(parseData);
+        // this.setState({ articles: parseData.articles })
+        // }
+
+
+        this.setState({
+            page: this.state.page - 1,
+            articles: parseData.articles,
+            loading: false
+        })
+    }
+
+    handleNextclick = async () => {
+        console.log("Next")
+        this.setState({ loading: true })
+        if (!(this.state.page + 1 > Math.ceil(this.state.totalResults > this.props.pageSize))) {
+
+            let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=88f6341d3ae245aa849d084a95112645&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+            // const fetchNews = async () => {
+            { this.props.pageSize };
+            this.setState({ loading: false });
+            let data = await fetch(url);
+            let parseData = await data.json()
+            console.log(parseData);
+            // this.setState({ articles: parseData.articles })
+            // }
+
+
+            this.setState({
+                page: this.state.page + 1,
+                articles: parseData.articles,
+                loading: true
+            })
+        }
+    }
+
+
+    // need to slice 
+
     render() {
         return (
-            <div className='Container my-3  mx-5'>
-                <h1>NewsDay - Top Headlines</h1>
+            <div className='Container my-3  mx-5 '>
+                <h1 className='text-center'>NewsDay - Top Headlines</h1>
 
+                {this.state.loading && <Spinner />}
                 {this.state.articles.map((element) => {
                     console.log(element, 293)
                 })}
@@ -300,12 +380,13 @@ export class News extends Component {
                         )
                     })}
 
-                    {/* <div className="col-md-4">
-                        <NewsItem tittle="my-Tittle" description="mydesc" />
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem tittle="my-Tittle" description="mydesc" />
-                    </div> */}
+                </div>
+
+                <div className="container d-flex justify-content-between">
+                    <button disabled={this.state.page <= 1} type="button" className="btn btn-dark" onClick={this.handlePrevclick}> &larr;Previous</button>
+                    <button type="button" className="btn btn-dark" onClick={this.handleNextclick}>Next &rarr;</button>
+
+                    {/* <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults > this.props.pageSize)} type="button" className="btn btn-dark" onClick={this.handleNextclick}>Next &larr;</button> */}
                 </div>
             </div >
         )
