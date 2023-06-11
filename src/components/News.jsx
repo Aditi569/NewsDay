@@ -2,14 +2,6 @@ import React, { Component } from 'react'
 import NewsItem from '../NewsItem';
 import Spinner from '../Spinner';
 
-
-
-// You are using classbased that is too old. and now a days every class based component is getiing converted to functional based
-// so even in interview no one ask about class component  i know but harry uses this and created news by API
-// if you anyway can convert it to functional based it will be awesome. you will learn lot of things
-// you already make functional component. how to pass props.you just don't know about useeffect which will be used to fetch the api
-// and usestate will be used for storing that data came from api  
-
 export class News extends Component {
     articles = [
         {
